@@ -8,7 +8,7 @@ const imageStorage = new LocalImageStorage(config.uploadDir);
 const analysisService = new GeminiAnalysisService({ apiKey: config.geminiApiKey, model: config.geminiModel, timeoutMs: config.geminiTimeoutMs });
 export async function createInspection(request, response, next) {
   try {
-    const supplierId = request.body.supplier_id?.trim();
+    const supplierId = request.body?.supplier_id?.trim();
     if (!supplierId || supplierId.length > 100) throw new AppError(400, "A valid supplier ID is required.");
     if (!request.files?.length || request.files.length > config.maxPhotos) throw new AppError(400, "Upload between 1 and 5 photos.");
     request.files.forEach((file) => validateImage(file, config.maxImageBytes));
