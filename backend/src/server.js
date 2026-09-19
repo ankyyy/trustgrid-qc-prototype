@@ -15,7 +15,7 @@ const PORT = Number(process.env.PORT ?? 8000);
 const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 const MAX_PHOTOS = 5;
 const UPLOAD_DIR = path.resolve(projectRoot, process.env.UPLOAD_DIR ?? "uploads");
-const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-3.6-flash";
 const ALLOWED_MEDIA_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 const SYSTEM_PROMPT = `You are TrustGrid QC, an industrial biomass intake assistant.
