@@ -1,7 +1,7 @@
 import multer from "multer";
 import { config } from "../config/env.js";
 import { AppError } from "../lib/app-error.js";
-import { isAllowedImageMimeType } from "../validators/image-validator.js";
+import { isAllowedImageMimeType } from "../validators/image.validator.js";
 export const uploadPhotos = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: config.maxImageBytes, files: config.maxPhotos },

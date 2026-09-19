@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import { config } from "./config/env.js";
 import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
-import { inspectionRouter } from "./routes/inspection-routes.js";
+import { inspectionRouter } from "./routes/inspection.routes.js";
 export const app = express();
 app.use(cors({ origin: config.corsOrigins, methods: ["GET", "POST"], allowedHeaders: ["Content-Type", "Authorization"] }));
 app.get("/health", (_request, response) => response.json({ status: "ok" }));

@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { AppError } from "../src/lib/app-error.js";
 import { errorHandler } from "../src/middleware/error-handler.js";
-import { GeminiAnalysisService } from "../src/services/gemini-analysis-service.js";
-import { validateImage } from "../src/validators/image-validator.js";
+import { GeminiAnalysisService } from "../src/services/gemini-analysis.service.js";
+import { validateImage } from "../src/validators/image.validator.js";
 
 function responseRecorder() {
   return {
