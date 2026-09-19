@@ -31,5 +31,17 @@ CREATE TABLE inspection_images (
   created_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (inspection_id, position)
 );
+
+-- Write-only audit trail: analysis and lab events are preserved as historical facts.
+CREATE TABLE inspection_events (
+  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  inspection_id uuid NOT NULL REFERENCES inspections(id),
+  event_type text NOT NULL CHECK (event_type IN ('uploaded', 'ai_analyzed', 'lab_result_received', 'analysis_failed')),
+  payload jsonb NOT NULL DEFAULT '{}'::jsonb,
+  recorded_at timestamptz NOT NULL DEFAULT now()
+);
+-- In production, grant the application role INSERT/SELECT only (no UPDATE/DELETE).
+REVOKE UPDATE, DELETE ON inspection_events FROM PUBLIC;
 CREATE INDEX inspections_supplier_created_idx ON inspections (supplier_id, created_at DESC);
 CREATE INDEX inspections_ai_result_gin_idx ON inspections USING gin (ai_result);
+CREATE INDEX inspection_events_inspection_idx ON inspection_events (inspection_id, recorded_at);

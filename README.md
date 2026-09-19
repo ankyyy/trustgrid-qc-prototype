@@ -1,20 +1,19 @@
 # TrustGrid QC prototype
 
-Minimal end-to-end prototype for sending 1–5 biomass photos from a weighbridge UI to a protected backend for Gemini screening. The browser never sees the Gemini credential.
+Minimal end-to-end prototype for sending 1–5 biomass photos from a weighbridge UI to a protected Node.js backend for Gemini screening. The browser never sees the Gemini credential.
 
 ## Run locally
 
-Requires Python 3.11+ and Node 20+.
+Requires Node.js 20+ (for built-in `fetch` and `AbortSignal.timeout`).
 
 ```bash
 cp .env.example .env
-python -m venv .venv && source .venv/bin/activate
-pip install -r backend/requirements.txt
-set -a && source .env && set +a
-uvicorn backend.app.main:app --reload
+cd backend
+npm install
+npm run dev
 ```
 
-In another terminal:
+In another terminal, start the React frontend:
 
 ```bash
 cd frontend
@@ -27,8 +26,8 @@ Open `http://localhost:5173`. Without `GEMINI_API_KEY`, the backend returns a cl
 ## Security and architecture
 
 - The API key lives only in a server environment variable; it is neither returned nor bundled in the frontend.
-- The backend applies a 15 MB per-image limit, allowed MIME types, basic file-signature validation, generated filenames, CORS allowlisting, provider timeouts, and generic upstream errors.
-- `db/schema.sql` stores a supplier link, object-storage image references, Gemini output as `JSONB`, and later physical lab result separately for calibration. In production the API would write these in a DB transaction, upload media to private object storage, and provide signed read URLs only to authorized users.
+- The Express backend uses Multer's in-memory upload handling with a 15 MB per-image limit and maximum of five files. It validates MIME types and image signatures, generates safe filenames, CORS-allows only configured origins, applies a Gemini timeout, and returns generic upstream errors.
+- `db/schema.sql` stores a supplier link, object-storage image references, Gemini output as `JSONB`, later physical lab result, and an append-only inspection-events ledger. In production the API would write inspection, images, and ledger events in one transaction, upload media to private object storage, and provide signed read URLs only to authorized users.
 - The Gemini call is intentionally server-side. A production deployment would add user authentication, supplier authorization, rate limits, malware scanning, durable queues, audit logs, encrypted storage, and secret-manager credentials.
 
 ## Network drops during a 15 MB mobile upload
