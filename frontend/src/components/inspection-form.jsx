@@ -6,7 +6,7 @@ export function InspectionForm({ supplierId, photos, isSubmitting, onSupplierIdC
     </label>
     <br />
     <label>
-      Photos (1–5, max 15 MB each)
+      Photos (max 15 MB)
       <input required type="file" accept="image/jpeg,image/png,image/webp" multiple
         onChange={(event) => onPhotosChange(Array.from(event.target.files).slice(0, 5))} />
     </label>
